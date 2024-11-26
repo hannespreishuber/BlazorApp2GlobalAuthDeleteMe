@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    @RendererInfo.Name
     <Routes @rendermode=@PageRenderMode />
     <script src="_framework/blazor.web.js"></script>
 </body>
@@ -24,6 +25,25 @@
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
-    private IComponentRenderMode? PageRenderMode =>
-        HttpContext.AcceptsInteractiveRouting() ? InteractiveServer : null;
+    // private IComponentRenderMode? PageRenderMode =>
+    //     HttpContext.AcceptsInteractiveRouting() ? InteractiveServer : null;
+    private IComponentRenderMode? myVar;
+    private IComponentRenderMode? PageRenderMode
+    {
+        get
+        {
+
+            if (HttpContext.Request.Path.StartsWithSegments("/Account"))
+            {
+                return null;
+            }
+            if (HttpContext.Request.Path == "/")
+            {
+                return null;
+            }
+
+            return InteractiveServer;
+        }
+        set { myVar = value; }
+    }
 }
